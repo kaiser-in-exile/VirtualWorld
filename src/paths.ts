@@ -1,0 +1,1 @@
+export const filesRoot = '' // when in production: 'https://d3hs3qv31vrl2x.cloudfront.net/public/'

@@ -8,12 +8,11 @@
     "deploy": "gh-pages -d dist"
   },
   "devDependencies": {
-    "typescript": "^4.4.4",
-    "vite": "^2.7.2"
+    "@types/three": "^0.181.0",
+    "typescript": "^5.9.3",
+    "vite": "^7.2.4"
   },
   "dependencies": {
-    "@types/three": "^0.137.0",
-    "hls.js": "^1.1.5",
-    "three": "^0.137.5"
+    "three": "^0.181.2"
   }
 }
