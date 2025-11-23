@@ -1,6 +1,6 @@
 import { defineConfig } from 'vite'
 
-const isGithubPages = true // !!process.env.GITHUB_PAGES;
+const isGithubPages = !!process.env.GITHUB_PAGES;
 
 export default defineConfig({
     build: {

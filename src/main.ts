@@ -24,8 +24,6 @@ const app = document.querySelector<HTMLDivElement>("#app")!;
 const preloader = document.querySelector<HTMLDivElement>("#preloader")!;
 const preloaderText = document.querySelector<HTMLHeadingElement>("#preloader > h1")!;
 
-// let contentLoaded = false;
-
 const hud = {
     time: document.querySelector<HTMLDivElement>("#time")!,
     location: document.querySelector<HTMLDivElement>("#location")!,
@@ -42,7 +40,7 @@ const hud = {
     },
 };
 
-const filesRoot = ""; // 'https://d3hs3qv31vrl2x.cloudfront.net/public/'
+const filesRoot = import.meta.env.CLIENT_FILES_ROOT;
 const recordingsRoot = "https://d3hs3qv31vrl2x.cloudfront.net/recordings/";
 
 const mousePointer = new THREE.Vector2();
