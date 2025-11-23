@@ -788,10 +788,6 @@ function gameUpdate(deltaT: number) {
     }
 }
 
-function propsUpdate() {
-    sphereInstances.rotateY((2 * Math.PI) / 2400);
-}
-
 function update() {
     if (GameState.PlayerState != "INTERACTING") {
         PLAYER.update(worldClock.getDelta());
@@ -800,7 +796,6 @@ function update() {
     hud.location.innerText = `(${PLAYER.model.position.x.toFixed(2)}, ${PLAYER.model.position.y.toFixed(
         2
     )}, ${PLAYER.model.position.z.toFixed(2)})`;
-    propsUpdate();
     gameUpdate(worldClock.getDelta());
 }
 
