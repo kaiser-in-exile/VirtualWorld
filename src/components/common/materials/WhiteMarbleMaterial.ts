@@ -33,7 +33,7 @@ marbleRoughnessTexture.needsUpdate = true;
 marbleNormalTexture.needsUpdate = true;
 marbleDisplacementTexture.needsUpdate = true;
 
-export const whiteMarbleMaterial = new (THREE as any).MeshPhysicalMaterial({
+export const whiteMarbleMaterial = new THREE.MeshPhysicalMaterial({
   map: marbleTexture,
   roughnessMap: marbleRoughnessTexture,
   side: THREE.DoubleSide,

@@ -80,8 +80,6 @@ const worldClock = new THREE.Clock();
 // Create a scene
 const scene = new THREE.Scene();
 scene.add(PLAYER.model);
-scene.background = new THREE.Color(0x87ceeb);
-scene.fog = new THREE.FogExp2(0x87ceeb, 0.02);
 
 // Adding a charachter mesh for the player to follow
 PLAYER.model.castShadow = false;
@@ -140,17 +138,34 @@ scene.add(entrancePanel);
 entrancePanel.position.set(-1, 0, -70);
 
 function loadLights() {
-    const ambientLight = new THREE.AmbientLight(0xfffff, 1);
+    // Subtle bluish ambient to simulate moonlit evening
+    const ambientLight = new THREE.AmbientLight(0x20283a, 0.35);
     scene.add(ambientLight);
-    const dirLight = new THREE.DirectionalLight(0xffffff, 3);
-    dirLight.color.setHSL(0.5, 0.3, 0.2);
-    dirLight.position.set(0, 1.75, 0);
-    dirLight.position.multiplyScalar(5);
-    scene.add(dirLight);
-    const hemiLight = new THREE.HemisphereLight(0xffffff, 0xffffff, 1);
-    hemiLight.color.setHSL(0.3, 0.5, 0.8);
-    hemiLight.groundColor.setHSL(0.6, 0.3, 0.4);
+
+    // Moon / key directional light (cool, low intensity)
+    const moonLight = new THREE.DirectionalLight(0x89aaff, 0.6);
+    moonLight.position.set(-10, 20, -10);
+    moonLight.castShadow = true;
+    moonLight.shadow.radius = 4;
+    moonLight.shadow.mapSize.set(1024, 1024);
+    scene.add(moonLight);
+
+    // Hemisphere light for subtle sky/ground color balance
+    // cool sky, very dim warm ground bounce
+    const hemiLight = new THREE.HemisphereLight(0x22384d, 0x402011, 0.25);
     scene.add(hemiLight);
+
+    // Local warm accents (e.g. near hobo / lounge) to create points of interest
+    const hoboWarm = new THREE.PointLight(0xffcc88, 0.6, 8, 2);
+    hoboWarm.position.set(0, 2, -20); // near hobo
+    scene.add(hoboWarm);
+
+    const loungeWarm = new THREE.PointLight(0xffbb73, 0.4, 10, 2);
+    loungeWarm.position.set(-2, 2, 2); // gentle glow in lounge area
+    scene.add(loungeWarm);
+
+    // Evening fog for atmosphere and depth
+    scene.fog = new THREE.FogExp2(0x0a0f1a, 0.02);
 }
 loadLights();
 
@@ -353,6 +368,7 @@ const hoboModel = await gltfLoader.loadAsync(`${filesRoot}res/models/misc/Hobo.g
 hoboModel.scene.scale.setScalar(0.001);
 const hoboBaseGeometry = new THREE.CylinderGeometry(3, 3, 0.3, 72, 1);
 const hoboBase = new THREE.Mesh(hoboBaseGeometry, whiteMarbleMaterial);
+hoboBase.receiveShadow = true;
 hobo.add(hoboBase);
 hobo.add(hoboModel.scene);
 scene.add(hobo);
