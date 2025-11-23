@@ -37,7 +37,7 @@ jobs:
             - name: Setup Node.JS environment
               uses: actions/setup-node@v6.0.0
             - name: Install Dependencies
-              run: npm install
+              run: npm install --dev
             - name: Build Bundle
               run: npm run build
             - name: Upload artifact
