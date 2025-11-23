@@ -2,7 +2,7 @@
   "name": "threejsexperiments",
   "version": "0.0.0",
   "scripts": {
-    "dev": "vite --host",
+    "dev": "set NODE_ENV=development && vite --host",
     "build": "tsc && vite build",
     "preview": "vite preview",
     "deploy": "gh-pages -d dist"

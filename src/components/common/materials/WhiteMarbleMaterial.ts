@@ -3,6 +3,9 @@ import { filesRoot } from '../../../paths';
 
 const textureLoader = new THREE.TextureLoader();
 
+const marbleTexturePath = `${filesRoot}res/textures/marble/Marble021_1K_Color.jpg`;
+console.log(`[info] Loading marble texture from: ${marbleTexturePath}`);
+
 // Color / Albedo
 const marbleTexture = await textureLoader.loadAsync(`${filesRoot}res/textures/marble/Marble021_1K_Color.jpg`);
 marbleTexture.wrapS = marbleTexture.wrapT = THREE.RepeatWrapping;
