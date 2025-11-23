@@ -8,25 +8,22 @@ const marbleTexture = await textureLoader.loadAsync(`${filesRoot}res/textures/ma
 marbleTexture.wrapS = marbleTexture.wrapT = THREE.RepeatWrapping;
 // UV-based tiling will control repetition; keep material repeat at 1
 marbleTexture.repeat.set(1, 1);
-(marbleTexture as any).encoding = (THREE as any).sRGBEncoding;
 marbleTexture.anisotropy = 8;
 
 // Roughness
 const marbleRoughnessTexture = await textureLoader.loadAsync(`${filesRoot}res/textures/marble/Marble021_1K_Roughness.jpg`);
 marbleRoughnessTexture.wrapS = marbleRoughnessTexture.wrapT = THREE.RepeatWrapping;
 marbleRoughnessTexture.anisotropy = 4;
-(marbleRoughnessTexture as any).encoding = (THREE as any).LinearEncoding;
 
 // Normal and displacement maps (for added surface detail)
 const marbleNormalTexture = await textureLoader.loadAsync(`${filesRoot}res/textures/marble/Marble021_1K_NormalGL.jpg`);
 marbleNormalTexture.wrapS = marbleNormalTexture.wrapT = THREE.RepeatWrapping;
 marbleNormalTexture.anisotropy = 4;
-(marbleNormalTexture as any).encoding = (THREE as any).LinearEncoding;
+
 
 const marbleDisplacementTexture = await textureLoader.loadAsync(`${filesRoot}res/textures/marble/Marble021_1K_Displacement.jpg`);
 marbleDisplacementTexture.wrapS = marbleDisplacementTexture.wrapT = THREE.RepeatWrapping;
 marbleDisplacementTexture.anisotropy = 4;
-(marbleDisplacementTexture as any).encoding = (THREE as any).LinearEncoding;
 
 marbleTexture.needsUpdate = true;
 marbleRoughnessTexture.needsUpdate = true;

@@ -1,19 +1,19 @@
 import "./style.css";
 import * as THREE from "three";
-import { FBXLoader } from "three/examples/jsm/loaders/FBXLoader";
-import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
+import { FBXLoader } from "three/addons/loaders/FBXLoader.js";
+import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 
 import { EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer.js";
 import { RenderPass } from "three/examples/jsm/postprocessing/RenderPass.js";
 
-import { Reflector } from "three/examples/jsm/objects/Reflector";
+import { Reflector } from 'three/addons/objects/Reflector.js';;
 
 import { Advert } from "./advert";
 import { Artwork } from "./artwork";
 import { MediaPlatform } from "./components/common/MediaPlatform";
 import { TreasureHuntManager } from "./treasure";
 import { VideoController } from "./videoController";
-import { taxicabDistance, isPlayerPositionValid } from "./utils/limit.utils";
+import { taxicabDistance } from "./utils/limit.utils";
 import { Player } from "./components/common/Player";
 import { entrancePanel } from "./components/EntrancePanel";
 import { whiteMarbleMaterial } from "./components/common/materials/WhiteMarbleMaterial";
@@ -545,66 +545,6 @@ setTimeout(treasureSpawn, treasureSpawnTimeout);
 
 preloaderText.innerText = "Almost Done!";
 
-// Walls
-const wallShape = new THREE.Shape();
-wallShape.moveTo(0, 0);
-wallShape.lineTo(-20, 0);
-wallShape.lineTo(-20, 40);
-wallShape.lineTo(-60, 40);
-wallShape.lineTo(-60, 210);
-wallShape.lineTo(60, 210);
-wallShape.lineTo(60, 40);
-wallShape.lineTo(20, 40);
-wallShape.lineTo(20, 0);
-const wallGeometry = new THREE.ExtrudeGeometry(wallShape, {
-    depth: 35,
-});
-const wallMaterial = whiteMarbleMaterial;
-const walls = new THREE.Mesh(wallGeometry, wallMaterial);
-walls.rotateX(Math.PI / 2);
-walls.translateZ(-30);
-walls.translateY(-80);
-scene.add(walls);
-
-// WCL Adverts
-// const adGeometry = new THREE.PlaneGeometry(6, 3);
-// const wclMaterial = new THREE.MeshBasicMaterial({
-//   map: await textureLoader.loadAsync(`${filesRoot}${adBasePath}wcl.png`),
-//   transparent: true
-// })
-// const wclInstances = new THREE.InstancedMesh(adGeometry, wclMaterial, 30);
-// for (let i = 0; i < 30; i++) {
-//   let row = Math.floor(i / 10);
-//   let col = i % 10
-//   transfromDummy.position.set(
-//     ((i % 2) * 2 - 1) * 60,
-//     1 + row * 2,
-//     col * 4 + (row % 2) * 2 - 4
-//   )
-//   transfromDummy.rotation.y = (((i % 2) * 2 - 1) * -Math.PI / 2)
-//   transfromDummy.updateMatrix();
-//   wclInstances.setMatrixAt(i, transfromDummy.matrix)
-// }
-
-// const dharampethMahilaBankMaterial = new THREE.MeshBasicMaterial({
-//   map: await textureLoader.loadAsync(`${filesRoot}${adBasePath}mahila.png`),
-//   transparent: true
-// })
-// const dmbInstances = new THREE.InstancedMesh(adGeometry, dharampethMahilaBankMaterial, 30);
-// for (let i = 0; i < 30; i++) {
-//   let row = Math.floor(i / 10);
-//   let col = i % 10
-//   transfromDummy.position.set(
-//     ((i % 2) * 2 - 1) * 60,
-//     1 + row * 2,
-//     col * 4 + (row % 2) * 2
-//   )
-//   transfromDummy.rotation.y = (((i % 2) * 2 - 1) * -Math.PI / 2)
-//   transfromDummy.updateMatrix();
-//   dmbInstances.setMatrixAt(i, transfromDummy.matrix)
-// }
-// scene.add(dmbInstances);
-// scene.add(wclInstances);
 
 const gformTreasure = treasureModel.clone();
 gformTreasure.traverse((c) => {
@@ -686,7 +626,7 @@ const sofas = [
     fbxLoader.loadAsync(`${filesRoot}res/models/furniture/Couch_Large1.fbx`),
 ];
 Promise.all(sofas).then((sofas) => {
-    sofas.forEach((sofa) => sofa.scale.setScalar(0.005));
+    // sofas.forEach((sofa) => sofa.scale.setScalar(0.005));
     const brownSofa = sofas[0];
     const greenSofa = sofas[1];
     brownSofa.rotateY(Math.PI / 2);
