@@ -29,6 +29,7 @@ jobs:
             url: ${{ steps.deployment.outputs.page_url }}
         env:
             GITHUB_PAGES: true
+            NODE_ENV: production
         runs-on: ubuntu-latest
         steps:
             - name: Checkout

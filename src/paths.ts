@@ -1,1 +1,1 @@
-export const filesRoot = '' // when in production: 'https://d3hs3qv31vrl2x.cloudfront.net/public/'
+export const filesRoot = import.meta.env.CLIENT_FILES_ROOT // when in production: 'https://d3hs3qv31vrl2x.cloudfront.net/public/'
