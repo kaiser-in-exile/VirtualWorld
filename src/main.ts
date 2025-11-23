@@ -346,63 +346,11 @@ standupPlatform._generateInteraction = () => {
 //scene.add(standupPlatform._model)
 //interactions.push(standupPlatform);
 
-// Spheres
-const sphereGeometry = new THREE.SphereGeometry(1, 8, 8);
-const sphereMaterial = new THREE.MeshBasicMaterial({
-    color: "orangered",
-});
-const INSTANCE_COUNT = 200;
-const sphereInstances = new THREE.InstancedMesh(sphereGeometry, sphereMaterial, INSTANCE_COUNT);
-const sphereTransfromDummy = new THREE.Object3D();
-for (let i = 0; i < INSTANCE_COUNT; i++) {
-    sphereTransfromDummy.position.set(
-        (Math.random() * 2 - 1) * 100,
-        5 + 5 * Math.random(),
-        (Math.random() * 2 - 1) * 100
-    );
-    sphereTransfromDummy.scale.setScalar(Math.random());
-    sphereTransfromDummy.updateMatrix();
-    sphereInstances.setMatrixAt(i, sphereTransfromDummy.matrix);
-}
-scene.add(sphereInstances);
-
-// Vegetation
-// const bushModel = await gltfLoader.loadAsync(`${filesRoot}res/models/props/bush.glb`);
-// const bush = bushModel.scene;
-// bush.scale.setScalar(0.005);
-
-// const bushInstances = new THREE.InstancedMesh(
-//   (bush.children[0].children[0] as THREE.Mesh).geometry,
-//   (bush.children[0].children[0] as THREE.Mesh).material,
-//   200
-// )
-// const R = 30;
-// const transfromDummy = new THREE.Object3D();
-// for (let i = 0; i < 100; i++) {
-//   const theta = Math.random() * 2 * Math.PI;
-//   const offset = (Math.random()) * 30
-//   transfromDummy.position.set(
-//     (R + offset) * Math.cos(theta),
-//     0.5 * 0.5 * Math.random(),
-//     (R + offset) * Math.sin(theta)
-//   )
-//   transfromDummy.scale.setScalar(0.25 + Math.random() * 0.25);
-//   transfromDummy.updateMatrix();
-//   bushInstances.setMatrixAt(i, transfromDummy.matrix);
-// }
-// scene.add(bushInstances);
-
 preloaderText.innerText = "Putting Treasures for you";
 
 // Hobo
 const hobo = new THREE.Object3D();
 const hoboModel = await gltfLoader.loadAsync(`${filesRoot}res/models/misc/Hobo.glb`);
-
-// hoboModel.scene.traverse(c => {
-//   if (c instanceof THREE.Mesh) {
-//     (c as THREE.Mesh).material = whiteMarbleMaterial
-//   }
-// })
 
 hoboModel.scene.scale.setScalar(0.001);
 const hoboBaseGeometry = new THREE.CylinderGeometry(3, 3, 0.3, 72, 1);

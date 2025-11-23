@@ -8,6 +8,7 @@
     "deploy": "gh-pages -d dist"
   },
   "devDependencies": {
+    "@types/node": "^24.10.1",
     "@types/three": "^0.181.0",
     "typescript": "^5.9.3",
     "vite": "^7.2.4"
