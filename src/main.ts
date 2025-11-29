@@ -6,7 +6,7 @@ import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer.js";
 import { RenderPass } from "three/examples/jsm/postprocessing/RenderPass.js";
 
-import { Reflector } from 'three/addons/objects/Reflector.js';;
+import { Reflector } from "three/addons/objects/Reflector.js";
 
 import { Advert } from "./advert";
 import { Artwork } from "./artwork";
@@ -17,6 +17,7 @@ import { taxicabDistance } from "./utils/limit.utils";
 import { Player } from "./components/common/Player";
 import { entrancePanel } from "./components/EntrancePanel";
 import { whiteMarbleMaterial } from "./components/common/materials/WhiteMarbleMaterial";
+import { bindControlsToPlayer } from "./components/controls/initControls";
 
 const playerModelUrl = "res/models/avatar/source/eve.fbx";
 
@@ -53,7 +54,6 @@ const fbxLoader = new FBXLoader();
 const gltfLoader = new GLTFLoader();
 
 const renderer = new THREE.WebGLRenderer({
-    logarithmicDepthBuffer: true,
     antialias: true,
 });
 renderer.shadowMap.enabled = true;
@@ -69,10 +69,13 @@ preloaderText.innerText = "Started Renderer";
 const composer = new EffectComposer(renderer);
 
 // Create a player object and setup the camera
-const PLAYER = new Player({ FOV: 70, aspect: window.innerWidth / window.innerHeight, near: 0.1, far: 1000 }, "Forest");
+const PLAYER = new Player({ FOV: 65, aspect: window.innerWidth / window.innerHeight, near: 0.1, far: 1000 }, "Forest");
 PLAYER.camera.position.set(0, 1, 0);
 
 preloaderText.innerText = "Generated Player Object";
+
+// bind controls to player
+bindControlsToPlayer(PLAYER);
 
 // Clock to keep track of time
 const worldClock = new THREE.Clock();
@@ -132,6 +135,25 @@ const groundMirror = new Reflector(groundGeometry, {
 scene.add(groundMirror);
 groundMirror.rotateX(-Math.PI / 2);
 groundMirror.position.y -= 0.01;
+
+// adding a sky
+// for us sky is basically a giant sphere surrounding the scene
+try {
+    const skyGeometry = new THREE.SphereGeometry(200, 32, 32);
+    const skyTexture = await textureLoader.loadAsync(`${filesRoot}res/backgrounds/moonrise_sky.png`);
+    const skyMaterial = new THREE.MeshBasicMaterial({
+        map: skyTexture,
+        side: THREE.BackSide,
+        depthWrite: false,
+    });
+    const sky = new THREE.Mesh(skyGeometry, skyMaterial);
+    sky.scale.x = -1; // Invert the sphere to view from inside
+    sky.frustumCulled = false;
+    scene.add(sky);
+} catch (err) {
+    console.error(`[error] unable to load sky`);
+    console.error(err);
+}
 
 // Loading logo and theme extrude
 scene.add(entrancePanel);
@@ -251,7 +273,15 @@ let interactions: Artwork[] = [];
 const artworkPanel = await fbxLoader.loadAsync(`${filesRoot}res/models/misc/Display Panels.fbx`);
 const timelineTexture = await textureLoader.loadAsync("res/backgrounds/timeline-day-3.png");
 artworkPanel.scale.setScalar(0.001);
-const artowrk = new Artwork("Timeline", "", timelineTexture, artworkPanel, new THREE.Vector3(3.1875, 1.5, -1));
+const artowrk = new Artwork(
+    "Timeline",
+    "",
+    timelineTexture,
+    artworkPanel,
+    new THREE.Vector3(3.1875, 1.5, -1),
+    "",
+    true
+);
 artowrk._generateInteraction = () => {
     const container = document.createElement("div");
     container.style.height = "100%";
@@ -275,29 +305,41 @@ scene.add(artowrk._model);
 artowrk._model.rotateY(Math.PI / 2);
 artowrk._model.position.set(-10, 0, 0);
 
+const [INSTA, FB, YT] = await Promise.all([
+    textureLoader.loadAsync(`${filesRoot}res/backgrounds/INSTA.jpg`),
+    textureLoader.loadAsync(`${filesRoot}res/backgrounds/FB.jpg`),
+    textureLoader.loadAsync(`${filesRoot}res/backgrounds/YOUTUBE.jpg`),
+]);
+
 // Redirection Props
 const platformData = [
     {
         name: "instagram",
         url: "https://www.instagram.com/aarohi_vnitnagpur/?hl=en",
-        texture: await textureLoader.loadAsync(`${filesRoot}res/backgrounds/INSTA.jpg`),
+        texture: INSTA,
     },
     {
         name: "facebook",
         url: "https://www.facebook.com/AarohiWorld/",
-        texture: await textureLoader.loadAsync(`res/backgrounds/FB.jpg`),
+        texture: FB,
     },
     {
         name: "youtube",
         url: "https://www.youtube.com/channel/UCcBmZqk4hUSbSiyQzGU20pg",
-        texture: await textureLoader.loadAsync(`res/backgrounds/YOUTUBE.jpg`),
+        texture: YT,
     },
 ];
 let redirectionPlatforms: Artwork[] = [];
 let pz = -60;
 platformData.forEach((pd) => {
-    const artstation = new Artwork(pd.name, pd.name, pd.texture, artworkPanel, new THREE.Vector3(3.1875, 1.5, -1));
-    artstation._redirect = pd.url;
+    const artstation = new Artwork(
+        pd.name,
+        pd.name,
+        pd.texture,
+        artworkPanel,
+        new THREE.Vector3(3.1875, 1.5, -1),
+        pd.url
+    );
     scene.add(artstation._model);
     artstation._model.position.set(10, 0, pz);
     artstation._model.rotateY((5 * Math.PI) / 4);
@@ -507,7 +549,6 @@ setTimeout(treasureSpawn, treasureSpawnTimeout);
 
 preloaderText.innerText = "Almost Done!";
 
-
 const gformTreasure = treasureModel.clone();
 gformTreasure.traverse((c) => {
     c.name = "gformTreasure";
@@ -595,6 +636,7 @@ Promise.all(sofas).then((sofas) => {
     brownSofa.position.set(-3, 0, 2);
     streamLounge.add(brownSofa);
     streamLounge.add(greenSofa);
+    console.log("added sofas to scene");
 });
 const streamLoungeBoundary = new THREE.Mesh(new THREE.SphereGeometry(4, 16, 32, 0, Math.PI), whiteMarbleMaterial);
 streamLoungeBoundary.position.set(-2, 0, 2);

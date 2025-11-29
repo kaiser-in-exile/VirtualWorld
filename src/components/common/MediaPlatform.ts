@@ -1,14 +1,14 @@
-import * as THREE from 'three'
+import * as THREE from "three";
 
 const controlRingGeometry = new THREE.TorusGeometry(0.5, 0.05, 36, 72);
 const controlRingMaterial = new THREE.MeshBasicMaterial({
-    color: 'gold'
-})
+    color: "gold",
+});
 
 export class MediaPlatform {
     _model: THREE.Object3D;
     _mediaName: string;
-    _texture: THREE.Texture | THREE.VideoTexture
+    _texture: THREE.Texture | THREE.VideoTexture;
 
     _platformMesh: THREE.Object3D;
     _controlRing: THREE.Object3D;
@@ -25,30 +25,27 @@ export class MediaPlatform {
             new THREE.PlaneGeometry(8, 4, 1, 1),
             new THREE.MeshBasicMaterial({
                 map: this._texture,
-                side: THREE.DoubleSide
+                side: THREE.DoubleSide,
             })
-        )
+        );
         this._mediaName = mediaName;
-        this._controlRing = new THREE.Mesh(
-            controlRingGeometry,
-            controlRingMaterial.clone()
-        )
+        this._controlRing = new THREE.Mesh(controlRingGeometry, controlRingMaterial.clone());
         this._controlRing.position.set(0, 0.5, -4.5);
         this._controlRing.rotateX(-Math.PI / 2);
         this._screen.position.set(0, 2, 0);
         this._screen.rotateY(Math.PI);
-        this._model.add(this._platformMesh)
+        this._model.add(this._platformMesh);
         this._model.add(this._screen);
         this._model.add(this._controlRing);
     }
 
     interactionRingActivate() {
-        ((this._controlRing as THREE.Mesh).material as THREE.MeshBasicMaterial).color = new THREE.Color('limegreen');
+        ((this._controlRing as THREE.Mesh).material as THREE.MeshBasicMaterial).color = new THREE.Color("limegreen");
         ((this._controlRing as THREE.Mesh).material as THREE.Material).needsUpdate = true;
     }
 
     interactionRingDeactivate() {
-        ((this._controlRing as THREE.Mesh).material as THREE.MeshBasicMaterial).color = new THREE.Color('gold');
+        ((this._controlRing as THREE.Mesh).material as THREE.MeshBasicMaterial).color = new THREE.Color("gold");
         ((this._controlRing as THREE.Mesh).material as THREE.Material).needsUpdate = true;
     }
 
@@ -57,19 +54,19 @@ export class MediaPlatform {
     }
 
     interactionStart(delta = 0) {
-        console.log(`Current video paused: ${this._video.paused}`)
+        console.log(`Current video paused: ${this._video.paused}`);
         if (this._video.paused || this._video.currentTime == 0) {
-            console.log(`Playing ${this._video.src} with delta ${delta}`)
+            console.log(`Playing ${this._video.src} with delta ${delta}`);
             this._video.load();
             this._video.onloadedmetadata = (_) => {
                 console.log(this._video.duration);
                 delta = Math.floor(delta) % Math.floor(this._video.duration);
                 if (delta > 0) {
-                    console.log(`setting delta`)
+                    console.log(`setting delta`);
                     this._video.currentTime = delta;
                 }
                 this._video.play();
-                this.interactionRingActivate()
+                this.interactionRingActivate();
             };
         }
     }
