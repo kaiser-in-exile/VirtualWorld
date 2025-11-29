@@ -10,10 +10,6 @@ const interactionRingMatrial = new THREE.MeshBasicMaterial({
     map: pinkGradientTexture,
     transparent: true,
 });
-const blankMaterial = new THREE.MeshBasicMaterial({
-    color: 0x00000000,
-    opacity: 0.0,
-});
 export class Artwork {
     _model: THREE.Object3D;
     _interactionRing: THREE.Object3D;

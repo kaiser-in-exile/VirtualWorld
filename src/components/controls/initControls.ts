@@ -16,21 +16,88 @@ const HUD = {
     },
 };
 
-
 // binds listeners from screen buttons to the player
 export function bindControlsToPlayer(player: Player) {
     // Register on screen HUD controls
-    ['mousedown', 'touchstart'].forEach(e => {
-      HUD.controls.w.addEventListener(e, (_) => { player.motion.forward = true; player.animationState = 'accelerating'; });
-      HUD.controls.a.addEventListener(e, (_) => { player.motion.left = true; });
-      HUD.controls.s.addEventListener(e, (_) => { player.motion.reverse = true; player.animationState = 'decelerating'; });
-      HUD.controls.d.addEventListener(e, (_) => { player.motion.right = true; });
+    ["mousedown", "touchstart"].forEach((eventName) => {
+        HUD.controls.w.addEventListener(
+            eventName,
+            (ev) => {
+                ev.preventDefault();
+                ev.stopPropagation();
+                player.motion.forward = true;
+                player.animationState = "accelerating";
+            },
+            { passive: false }
+        );
+        HUD.controls.a.addEventListener(
+            eventName,
+            (ev) => {
+                ev.preventDefault();
+                ev.stopPropagation();
+                player.motion.left = true;
+            },
+            { passive: false }
+        );
+        HUD.controls.s.addEventListener(
+            eventName,
+            (ev) => {
+                ev.preventDefault();
+                ev.stopPropagation();
+                player.motion.reverse = true;
+                player.animationState = "decelerating";
+            },
+            { passive: false }
+        );
+        HUD.controls.d.addEventListener(
+            eventName,
+            (ev) => {
+                ev.preventDefault();
+                ev.stopPropagation();
+                player.motion.right = true;
+            },
+            { passive: false }
+        );
     });
-    
-    ['mouseup', 'touchend'].forEach(e => {
-      HUD.controls.w.addEventListener(e, (_) => { player.motion.forward = false; player.animationState = 'idle'; });
-      HUD.controls.a.addEventListener(e, (_) => { player.motion.left = false; });
-      HUD.controls.s.addEventListener(e, (_) => { player.motion.reverse = false; player.animationState = 'idle'; });
-      HUD.controls.d.addEventListener(e, (_) => { player.motion.right = false; });
+
+    ["mouseup", "touchend"].forEach((eventName) => {
+        HUD.controls.w.addEventListener(
+            eventName,
+            (ev) => {
+                ev.preventDefault();
+                ev.stopPropagation();
+                player.motion.forward = false;
+                player.animationState = "idle";
+            },
+            { passive: false }
+        );
+        HUD.controls.a.addEventListener(
+            eventName,
+            (ev) => {
+                ev.preventDefault();
+                ev.stopPropagation();
+                player.motion.left = false;
+            },
+            { passive: false }
+        );
+        HUD.controls.s.addEventListener(
+            eventName,
+            (ev) => {
+                ev.preventDefault();
+                ev.stopPropagation();
+                player.motion.reverse = false;
+                player.animationState = "idle";
+            },
+            { passive: false }
+        );
+        HUD.controls.d.addEventListener(
+            eventName,
+            (ev) => {
+                ev.preventDefault();
+                ev.stopPropagation();
+                player.motion.right = false;
+            },
+            { passive: false }
+        );
     });
 }
